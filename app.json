@@ -13,13 +13,26 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yourcompany.pinkpays",
+      "buildNumber": "1.0.0",
+      "requireFullScreen": false,
+      "minimumOsVersion": "12.0",
+      "infoPlist": {
+        "NSCameraUsageDescription": "We need access to your camera to allow you to scan QR codes.",
+        "NSPhotoLibraryUsageDescription": "We need access to your photo library to let you select images for payments."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.yourcompany.pinkpays",
+      "versionCode": 1,
+      "permissions": ["CAMERA", "READ_EXTERNAL_STORAGE"],
+      "minSdkVersion": 21,
+      "targetSdkVersion": 33
     },
     "web": {
       "favicon": "./assets/favicon.png"
