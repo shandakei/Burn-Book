@@ -1,9 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
+import BackButton from '../components/BackButton';
 
 export default function ReceivePaymentScreen() {
   return (
     <View style={styles.container}>
+
+      <BackButton />
+
       <Text style={styles.title}>Your Payment QR Code</Text>
       <Image
         source={{ uri: 'https://as1.ftcdn.net/jpg/05/94/36/64/1000_F_594366491_I3vaOX6ZasBJsZNfuNErXASCcpcsQ1Co.jpg' }}
@@ -24,6 +28,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: '#fff'
   },
   qrCode: {
     width: 200,
@@ -32,4 +37,14 @@ const styles = StyleSheet.create({
     borderColor: '#fff',
     borderRadius: 16,
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    paddingVertical: 10,
+  },
+  backButton: {
+    marginRight: 10, // Adjust spacing
+    padding: 10,
+  },
+  
 });

@@ -1,101 +1,82 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import React from 'react';
+import { View, Text, ScrollView, StyleSheet, Image } from 'react-native';
+import BackButton from '../components/BackButton';
 
-export default function ContactsScreen() {
-  const [contacts, setContacts] = useState([]); // State to store contacts
-  const [loading, setLoading] = useState(true); // State for loading indicator
-  const [error, setError] = useState(null); // State for error handling
+const contacts = [
+  { id: '1', name: 'Alice Johnson', image: 'https://i.pravatar.cc/100?img=1' },
+  { id: '2', name: 'Bob Smith', image: 'https://i.pravatar.cc/100?img=2' },
+  { id: '3', name: 'Charlie Brown', image: 'https://i.pravatar.cc/100?img=3' },
+  { id: '4', name: 'Daisy Parker', image: 'https://i.pravatar.cc/100?img=4' },
+  { id: '5', name: 'Ethan Carter', image: 'https://i.pravatar.cc/100?img=5' },
+  { id: '6', name: 'Fiona Blake', image: 'https://i.pravatar.cc/100?img=6' },
+  { id: '7', name: 'George Hall', image: 'https://i.pravatar.cc/100?img=7' },
+  { id: '8', name: 'Hannah Rose', image: 'https://i.pravatar.cc/100?img=8' },
+  { id: '9', name: 'Ian Foster', image: 'https://i.pravatar.cc/100?img=9' },
+  { id: '10', name: 'Jessica Lee', image: 'https://i.pravatar.cc/100?img=10' },
+  { id: '11', name: 'Kevin White', image: 'https://i.pravatar.cc/100?img=11' },
+  { id: '12', name: 'Laura Adams', image: 'https://i.pravatar.cc/100?img=12' },
+  { id: '13', name: 'Mike Thompson', image: 'https://i.pravatar.cc/100?img=13' },
+  { id: '14', name: 'Nina Green', image: 'https://i.pravatar.cc/100?img=14' },
+  { id: '15', name: 'Oliver Scott', image: 'https://i.pravatar.cc/100?img=15' },
+  { id: '16', name: 'Paula King', image: 'https://i.pravatar.cc/100?img=16' },
+  { id: '17', name: 'Quincy Bell', image: 'https://i.pravatar.cc/100?img=17' },
+  { id: '18', name: 'Rachel Moore', image: 'https://i.pravatar.cc/100?img=18' },
+  { id: '19', name: 'Sam Walker', image: 'https://i.pravatar.cc/100?img=19' },
+  { id: '20', name: 'Tina Nelson', image: 'https://i.pravatar.cc/100?img=20' },
+];
 
-  // Replace with your Render API endpoint
-  const API_URL = 'https://your-render-backend.com/contacts';
-
-  useEffect(() => {
-    const fetchContacts = async () => {
-      try {
-        const response = await fetch(API_URL);
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status}`); // Handle HTTP errors
-        }
-        const data = await response.json();
-        setContacts(data); // Assuming the response is an array of contacts
-      } catch (err) {
-        setError(err.message); // Capture any errors
-      } finally {
-        setLoading(false); // Stop loading once data is fetched
-      }
-    };
-
-    fetchContacts();
-  }, []);
-
-  // Render each contact
-  const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.contact}>
-      <Text style={styles.contactText}>{item.name}</Text>
-    </TouchableOpacity>
-  );
-
-  if (loading) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="#007bff" />
-        <Text style={styles.loadingText}>Loading contacts...</Text>
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.errorText}>Failed to load contacts: {error}</Text>
-      </View>
-    );
-  }
-
+const ContactsScreen = () => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Contacts</Text>
-      <FlatList
-        data={contacts}
-        keyExtractor={(item) => item.id.toString()} // contact.id || user.id
-        renderItem={renderItem}
-      />
-    </View>
+    <ScrollView style={styles.container} aria-label="contacts-list">
+
+      <BackButton />
+
+      <Text style={styles.title}>Your Contacts</Text>
+
+      {contacts.map((contact) => (
+        <View key={contact.id} style={styles.contactItem} aria-label="contact-item">
+          <Image source={{ uri: contact.image }} style={styles.profileImage} aria-label="contact-image" />
+          <Text style={styles.contactName} aria-label="contact-name">{contact.name}</Text>
+        </View>
+      ))}
+    </ScrollView>
   );
-}
+};
+
+export default ContactsScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    // backgroundColor: '#f4f4f4',
-    paddingHorizontal: 20,
+    padding: 20,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    textAlign: 'center',
+    color: 'white',
   },
-  contact: {
-    padding: 15,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    marginVertical: 5,
-    width: '100%',
+  contactItem: {
+    flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: '#fff',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 10,
+    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
+    borderWidth: 1,
+    borderColor: '#ffffff'
   },
-  contactText: {
+  profileImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 15,
+  },
+  contactName: {
     fontSize: 16,
+    fontWeight: 'bold',
     color: '#333',
-  },
-  loadingText: {
-    marginTop: 10,
-    fontSize: 16,
-    color: '#555',
-  },
-  errorText: {
-    fontSize: 16,
-    color: 'red',
   },
 });

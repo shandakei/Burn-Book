@@ -1,46 +1,42 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Switch, TouchableOpacity } from 'react-native';
+import { View, ScrollView, Text, StyleSheet, Switch, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import BackButton from '../components/BackButton';
 
-export default function SettingsScreen({ navigate }) {
+
+export default function SettingsScreen() {
   const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(false);
   const [isDarkModeEnabled, setIsDarkModeEnabled] = useState(false);
 
   const toggleNotifications = () => setIsNotificationsEnabled(!isNotificationsEnabled);
   const toggleDarkMode = () => setIsDarkModeEnabled(!isDarkModeEnabled);
+  const navigation = useNavigation();
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
+
+      <BackButton />
+
       <Text style={styles.title}>Settings</Text>
 
       {/* Manage Profile */}
-      <TouchableOpacity
-        style={styles.sectionButton}
-        onPress={() => navigate('ManageProfile')}
-      >
+      <TouchableOpacity style={styles.sectionButton} aria-label='settings-button'>
         <Text style={styles.sectionText}>Manage Profile</Text>
       </TouchableOpacity>
 
+
       {/* Account Info */}
-      <TouchableOpacity
-        style={styles.sectionButton}
-        onPress={() => navigate('AccountInfo')}
-      >
+      <TouchableOpacity style={styles.sectionButton} aria-label='settings-button'>
         <Text style={styles.sectionText}>Account Info</Text>
       </TouchableOpacity>
 
       {/* Security */}
-      <TouchableOpacity
-        style={styles.sectionButton}
-        onPress={() => navigate('Security')}
-      >
+      <TouchableOpacity style={styles.sectionButton} aria-label='settings-button'>
         <Text style={styles.sectionText}>Security</Text>
       </TouchableOpacity>
 
       {/* Payment Settings */}
-      <TouchableOpacity
-        style={styles.sectionButton}
-        onPress={() => navigate('PaymentSettings')}
-      >
+      <TouchableOpacity style={styles.sectionButton} aria-label='settings-button'>
         <Text style={styles.sectionText}>Payment Settings</Text>
       </TouchableOpacity>
 
@@ -63,10 +59,10 @@ export default function SettingsScreen({ navigate }) {
       </View>
 
       {/* Log Out Button */}
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Auth")}>
         <Text style={styles.buttonText}>Log Out</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -74,24 +70,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    // backgroundColor: '#f4f4f4',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
-    color: 'white'
+    color: 'white',
   },
   sectionButton: {
     padding: 15,
-    backgroundColor: '#fff',
+    backgroundColor: '#ffffff',
+    color: 'white',
     borderRadius: 8,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    elevation: 3, // For Android shadow
+    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
     marginBottom: 15,
   },
   sectionText: {
@@ -107,11 +99,7 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#fff',
     borderRadius: 8,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    elevation: 3,
+    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)', 
   },
   settingText: {
     fontSize: 16,

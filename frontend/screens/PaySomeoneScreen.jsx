@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
+import BackButton from '../components/BackButton';
 
 export default function PaySomeoneScreen() {
   const [hasPermission, setHasPermission] = useState(null);
@@ -35,6 +36,9 @@ export default function PaySomeoneScreen() {
 
   return (
     <View style={styles.container}>
+
+      <BackButton />
+
       <Text style={styles.title}>Pay Someone</Text>
       <TouchableOpacity style={styles.button} onPress={openCamera}>
         <Text style={styles.buttonText}>Open Camera</Text>
@@ -65,6 +69,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 8,
     marginVertical: 10,
+    borderWidth: 1,
+    borderColor: '#ffffff'
   },
   buttonText: {
     color: '#fff',
