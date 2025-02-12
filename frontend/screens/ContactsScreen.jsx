@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, ScrollView, StyleSheet, Image } from 'react-native';
 import BackButton from '../components/BackButton';
 
+import theme from '../styles/theme';
+
 const contacts = [
   { id: '1', name: 'Alice Johnson', image: 'https://i.pravatar.cc/100?img=1' },
   { id: '2', name: 'Bob Smith', image: 'https://i.pravatar.cc/100?img=2' },
@@ -48,35 +50,40 @@ export default ContactsScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: theme.spacing.medium, 
+    backgroundColor: theme.colours.primary, 
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
+    fontSize: theme.fonts.large,
+    fontWeight: theme.fonts.boldWeight,
+    marginBottom: theme.spacing.large,
     textAlign: 'center',
-    color: 'white',
+    color: theme.colours.textLight, 
   },
   contactItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 10,
-    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
+    backgroundColor: theme.colours.secondary, 
+    padding: theme.spacing.medium,
+    borderRadius: theme.borderRadius.small,
+    marginBottom: theme.spacing.small,
+    shadowColor: theme.colours.shadow, 
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4, // Android shadow
     borderWidth: 1,
-    borderColor: '#ffffff'
+    borderColor: theme.colours.borderLight, 
   },
   profileImage: {
     width: 50,
     height: 50,
     borderRadius: 25,
-    marginRight: 15,
+    marginRight: theme.spacing.medium,
   },
   contactName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
+    fontSize: theme.fonts.regular,
+    fontWeight: theme.fonts.boldWeight,
+    color: theme.colours.textDark, 
   },
 });

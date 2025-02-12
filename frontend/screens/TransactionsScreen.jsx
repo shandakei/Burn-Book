@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, ScrollView, Text, StyleSheet } from 'react-native';
+import theme from '../styles/theme';
 
 export default function TransactionsScreen() {
 
@@ -43,54 +44,58 @@ export default function TransactionsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: theme.spacing.medium,
+    backgroundColor: theme.colours.primary,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
+    fontSize: theme.fonts.large,
+    fontWeight: theme.fonts.boldWeight,
+    marginBottom: theme.spacing.large,
     textAlign: 'center',
-    color: 'white',
+    color: theme.colours.textLight, 
   },
   balanceContainer: {
     alignItems: 'center',
-    padding: 20,
+    padding: theme.spacing.large,
     backgroundColor: 'rgba(255, 0, 115, 0.3)',
-    borderRadius: 8,
-    marginBottom: 20,
+    borderRadius: theme.borderRadius.small,
+    marginBottom: theme.spacing.large,
   },
   balanceLabel: {
-    fontSize: 16,
-    color: '#fff',
-    marginBottom: 10,
+    fontSize: theme.fonts.regular,
+    color: theme.colours.textLight,
+    marginBottom: theme.spacing.small,
   },
   balance: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#fff',
+    fontSize: theme.fonts.extraLarge,
+    fontWeight: theme.fonts.boldWeight,
+    color: theme.colours.textLight,
   },
   subtitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    color: 'white',
+    fontSize: theme.fonts.medium,
+    fontWeight: theme.fonts.boldWeight,
+    marginBottom: theme.spacing.medium,
+    color: theme.colours.textLight,
   },
   transaction: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 15,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    marginBottom: 10,
-    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)', 
+    padding: theme.spacing.medium,
+    backgroundColor: theme.colours.cardBackground,
+    borderRadius: theme.borderRadius.small,
+    marginBottom: theme.spacing.small,
+    shadowColor: theme.colours.shadow,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4, // For Android shadows
   },
   transactionDescription: {
-    fontSize: 16,
-    color: '#333',
+    fontSize: theme.fonts.regular,
+    color: theme.colours.textDark, 
   },
   transactionAmount: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
+    fontSize: theme.fonts.regular,
+    fontWeight: theme.fonts.boldWeight,
   },
 });

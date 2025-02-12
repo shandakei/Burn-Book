@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import BackButton from '../components/BackButton';
+import theme from '../styles/theme';
 
 export default function ReceivePaymentScreen() {
   return (
@@ -22,29 +23,21 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: '#f4f4f4',
+    backgroundColor: theme.colours.primary, 
+    padding: theme.spacing.medium, 
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    color: '#fff'
+    fontSize: theme.fonts.large,
+    fontWeight: theme.fonts.boldWeight,
+    marginBottom: theme.spacing.large,
+    color: theme.colours.textLight, 
+    textAlign: 'center',
   },
   qrCode: {
     width: 200,
     height: 200,
     borderWidth: 4,
-    borderColor: '#fff',
-    borderRadius: 16,
+    borderColor: theme.colours.textLight, 
+    borderRadius: theme.borderRadius.medium,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    paddingVertical: 10,
-  },
-  backButton: {
-    marginRight: 10, // Adjust spacing
-    padding: 10,
-  },
-  
 });

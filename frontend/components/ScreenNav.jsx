@@ -23,6 +23,7 @@ const ScreenNav = () => (
       tabBarStyle: { backgroundColor: '#e01d5e' },
       tabBarActiveTintColor: '#132121',
       tabBarInactiveTintColor: '#ccc',
+      tabBarShowLabel: false,
     })}
   >
     <Tab.Screen name="Home" component={HomeScreen} />

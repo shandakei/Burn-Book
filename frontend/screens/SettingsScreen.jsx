@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, ScrollView, Text, StyleSheet, Switch, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import BackButton from '../components/BackButton';
+import theme from '../styles/theme';
 
 
 export default function SettingsScreen() {
@@ -69,53 +70,43 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: theme.spacing.medium,
+    backgroundColor: theme.colours.primary, 
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
+    fontSize: theme.fonts.large,
+    fontWeight: theme.fonts.boldWeight,
+    marginBottom: theme.spacing.large,
     textAlign: 'center',
-    color: 'white',
+    color: theme.colours.textLight, 
   },
   sectionButton: {
-    padding: 15,
-    backgroundColor: '#ffffff',
-    color: 'white',
-    borderRadius: 8,
-    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
-    marginBottom: 15,
+    padding: theme.spacing.medium,
+    backgroundColor: theme.colours.cardBackground, 
+    borderRadius: theme.borderRadius.small,
+    marginBottom: theme.spacing.medium,
+    shadowColor: theme.colours.shadow,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4, // Android shadow
   },
   sectionText: {
-    fontSize: 16,
-    color: '#333',
-    fontWeight: 'bold',
-  },
-  setting: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 15,
-    padding: 10,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)', 
-  },
-  settingText: {
-    fontSize: 16,
-    color: '#333',
+    fontSize: theme.fonts.medium,
+    color: theme.colours.textDark, 
+    fontWeight: theme.fonts.boldWeight,
   },
   button: {
-    marginTop: 30,
-    padding: 15,
-    backgroundColor: 'none',
-    borderRadius: 8,
-    border: '1px solid white',
+    marginTop: theme.spacing.large,
+    padding: theme.spacing.medium,
+    borderRadius: theme.borderRadius.small,
+    borderWidth: 1,
+    borderColor: theme.colours.textLight,
     alignItems: 'center',
   },
   buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: theme.fonts.medium,
+    fontWeight: theme.fonts.boldWeight,
+    color: theme.colours.textLight, 
   },
 });

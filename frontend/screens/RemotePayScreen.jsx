@@ -2,9 +2,11 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import BackButton from '../components/BackButton';
+import theme from '../styles/theme';
+
 
 export default function RemotePayScreen() {
-  const navigation = useNavigation(); // ✅ Use this instead of props
+  const navigation = useNavigation(); // 
 
   return (
     <View style={styles.container}>
@@ -23,25 +25,28 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: '#f4f4f4',
+    backgroundColor: theme.colours.primary, 
+    padding: theme.spacing.medium,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
+    fontSize: theme.fonts.large,
+    fontWeight: theme.fonts.boldWeight,
+    marginBottom: theme.spacing.large,
+    color: theme.colours.textLight,
+    textAlign: 'center',
   },
   button: {
-    backgroundColor: '#007bff',
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    marginVertical: 10,
+    backgroundColor: theme.colours.primary, 
+    paddingVertical: theme.spacing.medium,
+    paddingHorizontal: theme.spacing.large,
+    borderRadius: theme.borderRadius.small,
+    marginVertical: theme.spacing.small,
     borderWidth: 1,
-    borderColor: '#ffffff'
+    borderColor: theme.colours.textLight, 
   },
   buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    color: theme.colours.textLight, 
+    fontSize: theme.fonts.medium,
+    fontWeight: theme.fonts.boldWeight,
   },
 });

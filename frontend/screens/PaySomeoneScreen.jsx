@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import BackButton from '../components/BackButton';
+import theme from '../styles/theme';
 
 export default function PaySomeoneScreen() {
   const [hasPermission, setHasPermission] = useState(null);
@@ -25,27 +26,31 @@ export default function PaySomeoneScreen() {
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: [ImagePicker.MediaType.Images], 
       allowsEditing: true,
       quality: 1,
     });
+  
     if (!result.canceled) {
       setImage(result.uri);
     }
   };
+  
 
   return (
     <View style={styles.container}>
-
       <BackButton />
 
       <Text style={styles.title}>Pay Someone</Text>
+
       <TouchableOpacity style={styles.button} onPress={openCamera}>
         <Text style={styles.buttonText}>Open Camera</Text>
       </TouchableOpacity>
+
       <TouchableOpacity style={styles.button} onPress={pickImage}>
         <Text style={styles.buttonText}>Choose from Gallery</Text>
       </TouchableOpacity>
+
       {image && <Image source={{ uri: image }} style={styles.preview} />}
     </View>
   );
@@ -56,33 +61,37 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: '#f4f4f4',
+    backgroundColor: theme.colours.primary, 
+    padding: theme.spacing.medium,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
+    fontSize: theme.fonts.large,
+    fontWeight: theme.fonts.boldWeight,
+    marginBottom: theme.spacing.large,
+    color: theme.colours.textLight, 
+    textAlign: 'center',
   },
   button: {
-    backgroundColor: '#007bff',
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    marginVertical: 10,
+    backgroundColor: theme.colours.primary, 
+    paddingVertical: theme.spacing.medium,
+    paddingHorizontal: theme.spacing.large,
+    borderRadius: theme.borderRadius.small,
+    marginVertical: theme.spacing.small,
     borderWidth: 1,
-    borderColor: '#ffffff'
+    borderColor: theme.colours.textLight, 
   },
   buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    color: theme.colours.textLight, 
+    fontSize: theme.fonts.medium,
+    fontWeight: theme.fonts.boldWeight,
   },
   preview: {
-    marginTop: 20,
+    marginTop: theme.spacing.large,
     width: 200,
     height: 200,
-    borderRadius: 10,
+    borderRadius: theme.borderRadius.small,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: theme.colours.shadow, 
   },
 });
+

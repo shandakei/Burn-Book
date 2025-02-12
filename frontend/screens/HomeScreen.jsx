@@ -1,12 +1,13 @@
 import React from 'react';
 import { ScrollView, View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native';
+import theme from '../styles/theme';
 
 
 const screenWidth = Dimensions.get('window').width;
 
 export default function HomeScreen({ navigation }) {
   return (
-    <ScrollView>
+    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
       {/* Profile Section */}
       <View style={styles.profile}>
         <Image
@@ -44,10 +45,12 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: theme.colours.primary,
+  },
+  contentContainer: {
+    paddingBottom: 60, 
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingBottom: 60,
-    backgroundColor: '#de2349'
   },
   profile: {
     alignItems: 'center',
@@ -70,8 +73,8 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   qrCode: {
-    width: screenWidth * 0.6,
-    height: screenWidth * 0.6,
+    width: screenWidth * 0.6 || 200,
+    height: screenWidth * 0.6 || 200,
     borderRadius: 16,
     borderWidth: 4,
     borderColor: '#fff',
