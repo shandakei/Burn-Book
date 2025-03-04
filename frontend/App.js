@@ -1,58 +1,37 @@
-import React from 'react';
-import 'react-native-gesture-handler';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
-// import './styles/global.css'
-import theme from'./styles/theme.js'
-
-import ScreenNav from './components/ScreenNav'
-import PaySomeoneScreen from './screens/PaySomeoneScreen';
-import ReceivePaymentScreen from './screens/ReceivePaymentScreen';
-import RemotePayScreen from './screens/RemotePayScreen';
-import ContactsScreen from './screens/ContactsScreen';
-import AuthScreen from './screens/AuthScreen';
+import * as Font from 'expo-font';
+import theme from './styles/theme.js';
+import HomeScreen from './screens/HomeScreen';
+import SummaryScreen from './screens/SummaryScreen';
+import TopNav from './components/TopNav';
 
 const Stack = createStackNavigator();
 
-const App = () => {
+export default function App() {
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  useEffect(() => {
+    async function loadFonts() {
+      await Font.loadAsync({
+        'PixelifySans': require('./assets/fonts/PixelifySans-Regular.ttf'),
+      });
+      setFontsLoaded(true);
+    }
+    loadFonts();
+  }, []);
+
+  if (!fontsLoaded) {
+    return null; // Prevents rendering until font is loaded
+  }
+
   return (
-    
-      <NavigationContainer>
-        <StatusBar style="light" backgroundColor={theme.colours.primary} />
-        <Stack.Navigator 
-          screenOptions={{ 
-            headerShown: false, 
-            gestureEnabled: true 
-            }}>
-
-          <Stack.Screen name="ScreenNav" component={ScreenNav} />
-          
-          <Stack.Screen name="PaySomeone" component={PaySomeoneScreen} />
-          <Stack.Screen name="ReceivePayment" component={ReceivePaymentScreen} />
-          <Stack.Screen name="RemotePay" component={RemotePayScreen} />
-          
-          <Stack.Screen name="Auth" component={AuthScreen} />
-          <Stack.Screen name="Contacts" component={ContactsScreen} />
-
-        </Stack.Navigator>
-      </NavigationContainer>
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Summary" component={SummaryScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-};
-
-export default App;
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: theme.colours.primary, 
-  },
-  contentContainer: {
-    flex: 1, 
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
+}

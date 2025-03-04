@@ -1,104 +1,81 @@
-import React from 'react';
-import { ScrollView, View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native';
+import React, { useState } from 'react';
+import { ScrollView, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import theme from '../styles/theme';
-
-
-const screenWidth = Dimensions.get('window').width;
+import TopNav from '../components/TopNav';
+import { generateDummyData } from '../utils/generateDummyData';
+import logo from '../assets/logo.png';
 
 export default function HomeScreen({ navigation }) {
+  const [filter, setFilter] = useState('all');
+  const transactions = generateDummyData(10);
+  
+  const filteredTransactions = transactions.filter(item => 
+    filter === 'all' ? true : filter === 'owed' ? item.type === 'owed' : item.type === 'owe'
+  );
+
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      {/* Profile Section */}
-      <View style={styles.profile}>
-        <Image
-          source={{ uri: 'https://newprofilepic.photo-cdn.net//assets/images/article/profile.jpg?90af0c8' }}
-          style={styles.profileImg}
-        />
-        <Text style={styles.welcomeText}>Welcome, [User]!</Text>
-      </View>
+    <ScrollView 
+      contentContainerStyle={styles.container} 
+      keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={true}
+    >
+      <Image source={logo} style={styles.logo} resizeMode="contain" />
+      
+      <TopNav filter={filter} setFilter={setFilter} />
 
-      {/* QR Code Section */}
-      <View style={styles.qrSection}>
-        <Image
-          source={{ uri: 'https://as1.ftcdn.net/jpg/05/94/36/64/1000_F_594366491_I3vaOX6ZasBJsZNfuNErXASCcpcsQ1Co.jpg' }}
-          style={styles.qrCode}
-        />
-        <Text style={styles.qrText}>Connect with friends!</Text>
-      </View>
-
-      {/* Action Buttons */}
-      <View style={styles.actionButtons}>
-        <TouchableOpacity style={styles.actionBtn} onPress={() => navigation.navigate('PaySomeone')}>
-          <Text style={styles.btnText}>Pay Someone</Text>
+      {filteredTransactions.map((item, index) => (
+        <TouchableOpacity 
+          key={index} 
+          style={[styles.card, item.type === 'owed' ? styles.owedCard : styles.oweCard]} 
+          onPress={() => navigation.navigate('Summary', { transaction: item })}>
+          <Text style={[styles.globalText, styles.cardTitle, item.type === 'owe' && styles.oweText]}>{item.title}</Text>
+          <Text style={[styles.globalText, styles.cardDate, item.type === 'owe' && styles.oweText]}>{item.date}</Text>
+          <Text style={[styles.globalText, styles.cardReminder, item.type === 'owe' && styles.oweText]}>Reminders: {item.reminder}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.actionBtn} onPress={() => navigation.navigate('ReceivePayment')}>
-          <Text style={styles.btnText}>Receive Payment</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.actionBtn} onPress={() => navigation.navigate('RemotePay')}>
-          <Text style={styles.btnText}>Remote Payment</Text>
-        </TouchableOpacity>
-      </View>
+      ))}
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: theme.colours.primary,
+    paddingBottom: 20,
   },
-  contentContainer: {
-    paddingBottom: 60, 
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+  globalText: {  // ✅ Apply font globally
+    fontSize: theme.fonts.medium,
+    fontFamily: theme.fonts.primary,
   },
-  profile: {
-    alignItems: 'center',
-    marginTop: 10,
+  logo: {
+    width: 200,
+    height: 200,
+    alignSelf: 'center',
+    marginVertical: 20,
   },
-  profileImg: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 5,
+  card: {
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 10,
   },
-  welcomeText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#fff',
+  owedCard: {
+    backgroundColor: '#fff',
   },
-  qrSection: {
-    alignItems: 'center',
-    width: '100%',
-    marginVertical: 10,
+  oweCard: {
+    backgroundColor: '#000',
   },
-  qrCode: {
-    width: screenWidth * 0.6 || 200,
-    height: screenWidth * 0.6 || 200,
-    borderRadius: 16,
-    borderWidth: 4,
-    borderColor: '#fff',
-    backgroundColor: '#ccc',
-  },
-  qrText: {
+  oweText: {
+    color: '#fff', // ✅ Ensures white text on black background
+  },  
+  cardTitle: {
     fontSize: 16,
-    color: '#fff',
   },
-  actionButtons: {
-    width: '100%',
-    marginTop: 10,
+  cardDate: {
+    fontSize: 12,
+    color: '#666',
   },
-  actionBtn: {
-    width: '100%',
-    paddingVertical: 20,
-    borderBottomWidth: 1,
-    borderTopWidth: 1,
-    borderColor: '#cbd1d6',
-    alignItems: 'center',
-  },
-  btnText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+  cardReminder: {
+    fontSize: 12,
+    color: '#888',
   },
 });

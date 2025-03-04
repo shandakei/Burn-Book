@@ -1,6 +1,6 @@
 const theme = {
     colours: {
-      primary: '#de2349',
+      primary: '#FF80CF',
       secondary: '#ffffff',
       darkBackground: '#de2349',
       textLight: '#ffffff',
@@ -20,11 +20,12 @@ const theme = {
       medium: 12,
     },
     fonts: {
+      primary: 'PixelifySans',
       regular: 16,
       medium: 18,
       large: 24,
       extraLarge: 32,
-      boldWeight: 'bold',
+      // boldWeight: 'bold',
     },
   };
   
