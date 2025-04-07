@@ -5,7 +5,9 @@ import * as Font from 'expo-font';
 import theme from './styles/theme.js';
 import HomeScreen from './screens/HomeScreen';
 import SummaryScreen from './screens/SummaryScreen';
+import NewPayment from './screens/NewPayment';
 import TopNav from './components/TopNav';
+import Review from './screens/Review.jsx';
 
 const Stack = createStackNavigator();
 
@@ -31,6 +33,8 @@ export default function App() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Summary" component={SummaryScreen} />
+        <Stack.Screen name="NewPayment" component={NewPayment} />
+        <Stack.Screen name="Review" component={Review} />
       </Stack.Navigator>
     </NavigationContainer>
   );

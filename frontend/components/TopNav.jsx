@@ -5,14 +5,14 @@ import theme from '../styles/theme';
 const TopNav = ({ filter, setFilter }) => {
   return (
     <View style={styles.navBar}>
-      <TouchableOpacity onPress={() => setFilter('all')}>
-        <Text style={[styles.navText, filter === 'all' && styles.activeText]}>ALL</Text>
+      <TouchableOpacity onPress={() => setFilter('pending')}>
+        <Text style={[styles.navText, filter === 'pending' && styles.activeText]}>PENDING</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => setFilter('owed')}>
-        <Text style={[styles.navText, filter === 'owed' && styles.activeText]}>OWED</Text>
+      <TouchableOpacity onPress={() => setFilter('received')}>
+        <Text style={[styles.navText, filter === 'received' && styles.activeText]}>RECEIVED</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => setFilter('owe')}>
-        <Text style={[styles.navText, filter === 'owe' && styles.activeText]}>OWE</Text>
+      <TouchableOpacity onPress={() => setFilter('sent')}>
+        <Text style={[styles.navText, filter === 'sent' && styles.activeText]}>SENT</Text>
       </TouchableOpacity>
     </View>
   );

@@ -3,7 +3,15 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import theme from '../styles/theme';
 
 export default function SummaryScreen({ route }) {
-  const { transaction } = route.params;
+  const { transaction } = route.params || {}; // Ensure we avoid crashes if no params exist
+
+  if (!transaction) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>No transaction data available</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -19,7 +27,9 @@ export default function SummaryScreen({ route }) {
         </View>
         <View style={styles.detailRow}>
           <Text style={styles.label}>Type:</Text>
-          <Text style={styles.value}>{transaction.type === 'owed' ? 'Owed to you' : 'You owe'}</Text>
+          <Text style={styles.value}>
+            {transaction.owedOweType === 'owed' ? 'Owed to you' : 'You owe'}
+          </Text>
         </View>
       </View>
       <TouchableOpacity style={styles.button}>
@@ -34,10 +44,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: theme.colours.primary,
-  },
-  globalText: {  // ✅ Apply font globally
-    fontSize: theme.fonts.medium,
-    fontFamily: theme.fonts.primary,
   },
   title: {
     color: '#fff',

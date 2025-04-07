@@ -9,7 +9,6 @@ const getRandomDate = () => {
   today.setDate(today.getDate() - randomDays);
   return `${today.getDate().toString().padStart(2, '0')}/${(today.getMonth() + 1)
     .toString().padStart(2, '0')}/${today.getFullYear()}`;
-  
 };
 const getRandomReminder = () => {
   const reminders = ['daily', '2 days', '3 days', 'weekly', 'fortnightly', 'monthly'];
@@ -18,12 +17,19 @@ const getRandomReminder = () => {
 
 export const generateDummyData = (count) => {
   return Array.from({ length: count }, () => {
-    const type = Math.random() > 0.5 ? 'owed' : 'owe';
+    const type = getRandomElement(['pending', 'received', 'sent']);
+    const owedOweType = type === 'pending' ? getRandomElement(['owed', 'owe']) : null;
+    const title = type === 'pending' 
+      ? `${owedOweType === 'owed' ? 'Owed' : 'Owe'} $${getRandomAmount()} ${owedOweType === 'owed' ? 'from' : 'to'} @${getRandomElement(names)} for ${getRandomElement(paymentReasons)}`
+      : `$${getRandomAmount()} from @${getRandomElement(names)} for ${getRandomElement(paymentReasons)}`;
+    
     return {
-      title: `Owed $${getRandomAmount()} ${type === 'owed' ? 'from' : 'to'} @${getRandomElement(names)} for ${getRandomElement(paymentReasons)}`,
+      title,
       date: getRandomDate(),
-      reminder: getRandomReminder(),
+      reminder: type === 'pending' ? getRandomReminder() : null,
       type,
+      owedOweType,
+      // cardStyle: owedOweType === 'owed' ? 'white' : 'black',
     };
   });
 };
