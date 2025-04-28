@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import theme from '../styles/theme';
+import BackButton from '../components/BackButton';
 
 export default function SummaryScreen({ route }) {
   const { transaction } = route.params || {}; // Ensure we avoid crashes if no params exist
@@ -15,6 +16,7 @@ export default function SummaryScreen({ route }) {
 
   return (
     <View style={styles.container}>
+      <BackButton />
       <Text style={styles.title}>Summary</Text>
       <View style={styles.detailsContainer}>
         <View style={styles.detailRow}>
