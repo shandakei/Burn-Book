@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ScrollView, Text, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import theme from '../styles/theme';
 import TopNav from '../components/TopNav';
@@ -11,7 +11,10 @@ import options from '../assets/options.png';
 
 export default function HomeScreen() {
   const [filter, setFilter] = useState('pending');
-  const [transactions, setTransactions] = useState(generateDummyData(10));
+  const [transactions, setTransactions] = useState([]);
+  const [activeSwipeIndex, setActiveSwipeIndex] = useState(null);
+  const [cardHeights, setCardHeights] = useState({});
+  const swipeableRefs = useRef({});
   const navigation = useNavigation();
   const route = useRoute();
 
@@ -19,26 +22,49 @@ export default function HomeScreen() {
     if (route.params?.newTransactions) {
       setTransactions((prev) => [...route.params.newTransactions, ...prev]);
     }
-  }, [route.params?.newTransactions]);
 
-  const filteredTransactions = transactions.filter(item =>
-    filter === 'pending' ? item.type === 'pending' :
-    filter === 'received' ? item.type === 'received' :
-    item.type === 'sent'
+    if (route.params?.updatedTransaction) {
+      setTransactions((prev) =>
+        prev.map((item) =>
+          item.date === route.params.updatedTransaction.date
+            ? route.params.updatedTransaction
+            : item
+        )
+      );
+    }
+  }, [route.params?.newTransactions, route.params?.updatedTransaction]);
+
+  useEffect(() => {
+    if (transactions.length === 0) {
+      setTransactions(generateDummyData(30));
+    }
+  }, []);
+
+  const filteredTransactions = transactions.filter((item) =>
+    filter === 'pending'
+      ? item.type === 'pending'
+      : filter === 'received'
+      ? item.type === 'received'
+      : item.type === 'sent'
   );
 
   const handleDelete = (indexToDelete) => {
-    setTransactions(prev => prev.filter((_, i) => i !== indexToDelete));
+    setTransactions((prev) => prev.filter((_, i) => i !== indexToDelete));
   };
 
   const handleEdit = (item) => {
     navigation.navigate('EditScreen', { transaction: item });
   };
-  
+
+  const handleCardLayout = (event, index) => {
+    const { height } = event.nativeEvent.layout;
+    setCardHeights(prev => ({ ...prev, [index]: height }));
+  };
 
   return (
     <View style={styles.container}>
       <ScrollView
+        style={{ flex: 1 }}
         contentContainerStyle={styles.scrollContainer}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={true}
@@ -47,59 +73,91 @@ export default function HomeScreen() {
         <TopNav filter={filter} setFilter={setFilter} />
 
         {filteredTransactions.map((item, index) => (
-          <Swipeable
-            key={index}
-            renderRightActions={() => (
-              <View style= {{ flexDirection: 'row' }} >
-                
-                <TouchableOpacity 
-                  onPress={() => handleEdit(item)} 
-                  style={styles.optionsAction}
-                >
-                  <Image source={options} style={styles.optionsIcon} resizeMode="contain" />
-                </TouchableOpacity>
-
-                <TouchableOpacity 
-                  onPress={() => handleDelete(index)}
-                  style={styles.deleteAction}
-                >
-                  <Image source={bin} resizeMode="contain" />
-                </TouchableOpacity>
-              </View>
-            )}
+          (item.owedOweType === 'owed' || item.type === 'received') ? (
+            <Swipeable
+              key={index}
+              ref={ref => { swipeableRefs.current[index] = ref; }}
+              onSwipeableOpen={() => {
+                if (activeSwipeIndex !== null && activeSwipeIndex !== index && swipeableRefs.current[activeSwipeIndex]) {
+                  swipeableRefs.current[activeSwipeIndex].close();
+                }
+                setActiveSwipeIndex(index);
+              }}
+              onSwipeableClose={() => setActiveSwipeIndex(null)}
+              renderRightActions={() => (
+                <View style={{ flexDirection: 'row' }}>
+                  <TouchableOpacity
+                    onPress={() => handleEdit(item)}
+                    style={[styles.optionsAction, { height: cardHeights[index] || 90 }]}
+                  >
+                    <Image source={options} style={styles.optionsIcon} resizeMode="contain" />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => handleDelete(index)}
+                    style={[styles.deleteAction, { height: cardHeights[index] || 90 }]}
+                  >
+                    <Image source={bin} style={styles.optionsIcon} resizeMode="contain" />
+                  </TouchableOpacity>
+                </View>
+              )}
             >
+              <TouchableOpacity
+                onLayout={(e) => handleCardLayout(e, index)}
+                style={[
+                  styles.card,
+                  styles.owedCard,
+                  {
+                    borderTopLeftRadius: 10,
+                    borderBottomLeftRadius: 10,
+                    borderTopRightRadius: activeSwipeIndex === index ? 0 : 10,
+                    borderBottomRightRadius: activeSwipeIndex === index ? 0 : 10
+                  },
+                ]}
+                activeOpacity={1}
+              >
+                <Text style={[styles.globalText, styles.cardTitle]}>{item.title}</Text>
+                <Text style={[styles.globalText, styles.cardDate]}>{item.date}</Text>
+                {item.reminder && (
+                  <Text style={[styles.globalText, styles.cardReminder]}>
+                    Reminders: {item.reminder}
+                  </Text>
+                )}
+              </TouchableOpacity>
+            </Swipeable>
+          ) : (
             <TouchableOpacity
-              style={[styles.card, item.owedOweType === 'owed' || item.type === 'received' ? styles.owedCard : styles.oweCard]}
-              onPress={() => navigation.navigate('Summary', { transaction: item })}
+              key={index}
+              style={[styles.card, styles.oweCard, { borderRadius: 10 }]}
+              onPress={() => navigation.navigate('Settle', { transaction: item })}
             >
-              <Text style={[styles.globalText, styles.cardTitle, (item.owedOweType === 'owe' || item.type === 'sent') && styles.oweText]}>{item.title}</Text>
-              <Text style={[styles.globalText, styles.cardDate, (item.owedOweType === 'owe' || item.type === 'sent') && styles.oweText]}>{item.date}</Text>
+              <Text style={[styles.globalText, styles.cardTitle, styles.oweText]}>{item.title}</Text>
+              <Text style={[styles.globalText, styles.cardDate, styles.oweText]}>{item.date}</Text>
               {item.reminder && (
-                <Text style={[styles.globalText, styles.cardReminder, (item.owedOweType === 'owe' || item.type === 'sent') && styles.oweText]}>
+                <Text style={[styles.globalText, styles.cardReminder, styles.oweText]}>
                   Reminders: {item.reminder}
                 </Text>
               )}
             </TouchableOpacity>
-          </Swipeable>
+          )
         ))}
       </ScrollView>
 
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={() => navigation.navigate('NewPayment')}
-      >
-        <Image source={require('../assets/new-payment.png')} style={styles.fabIcon} />
-      </TouchableOpacity>
+      <View style={styles.fabWrapper}>
+        <TouchableOpacity onPress={() => navigation.navigate('NewPayment')}>
+          <Image source={require('../assets/new-payment.png')} style={styles.fabIcon} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    position: 'relative',
     backgroundColor: theme.colours.primary,
+    height: '100vh',
     maxWidth: 500,
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   scrollContainer: {
     flexGrow: 1,
@@ -107,7 +165,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   globalText: {
-    fontSize: theme.fonts.large,
+    fontSize: theme.fonts.medium,
     fontFamily: theme.fonts.primary,
   },
   logo: {
@@ -121,7 +179,6 @@ const styles = StyleSheet.create({
     paddingRight: 15,
     paddingLeft: 15,
     paddingBottom: 12,
-    borderRadius: 10,
     marginBottom: 15,
   },
   owedCard: {
@@ -140,13 +197,14 @@ const styles = StyleSheet.create({
   },
   cardDate: {
     fontSize: 12,
+    paddingTop: 10,
     color: '#666',
   },
   cardReminder: {
     fontSize: 12,
     color: '#888',
   },
-  fab: {
+  fabWrapper: {
     position: 'absolute',
     right: 20,
     bottom: 20,
@@ -157,28 +215,32 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 5,
+    zIndex: 1000,
   },
   fabIcon: {
     width: 60,
     height: 60,
+  },
+  optionsAction: {
+    backgroundColor: '#EDEDED',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 60,
   },
   deleteAction: {
     backgroundColor: 'red',
     justifyContent: 'center',
     alignItems: 'center',
     width: 60,
-    marginVertical: 5,
-    borderRadius: 10,
+    borderTopRightRadius: 10,
+    borderBottomRightRadius: 10,
+  },
+  optionsIcon: {
+    width: 24,
+    height: 24,
   },
   deleteText: {
     color: '#fff',
     fontWeight: 'bold',
   },
-  optionsIcon: {
-    width: 60,
-    height: 60,
-    tintColor: '#fff', 
-    paddingRight: 60,
-    },
-    
 });

@@ -20,7 +20,8 @@ const theme = {
       medium: 12,
     },
     fonts: {
-      primary: 'PixelifySans',
+      primary: 'SilkScreen, Courier New',
+      header: 'PressStart2P, Arial',
       regular: 16,
       medium: 18,
       large: 24,

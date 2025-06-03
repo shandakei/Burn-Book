@@ -28,7 +28,6 @@ export default function EditScreen() {
   const [reason, setReason] = useState(parsedTransaction.reason);
   const [reminders, setReminders] = useState(!!transaction.reminder);
   const [frequency, setFrequency] = useState(transaction.frequency || 'Daily');
-
   const [showContacts, setShowContacts] = useState(false);
   const [availableContacts, setAvailableContacts] = useState(names.slice(0, 10));
   const [searchQuery, setSearchQuery] = useState('');
@@ -86,9 +85,20 @@ export default function EditScreen() {
         </Picker>
       </View>
 
-      <TouchableOpacity style={styles.doneButton} onPress={() => navigation.goBack()}>
+      <TouchableOpacity 
+        style={styles.doneButton} 
+        onPress={() => {
+          navigation.navigate('Home', { updatedTransaction: {
+            ...transaction,
+            title: `Owe $${amount} to ${who} for ${reason}`,
+            reminder: reminders ? 'Yes' : '',
+            frequency,
+          }});
+        }}
+      >
         <Text style={styles.doneText}>DONE</Text>
       </TouchableOpacity>
+
 
       {/* Contacts Picker Modal */}
       <Modal visible={showContacts} animationType="slide" transparent={true}>
